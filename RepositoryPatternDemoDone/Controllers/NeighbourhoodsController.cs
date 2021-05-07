@@ -2,41 +2,30 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RepositoryPatternDemoDone.Interfaces;
 using RepositoryPatternDemoDone.Models;
 
 namespace RepositoryPatternDemoDone.Controllers
 {
     public class NeighbourhoodsController : Controller
     {
-        private readonly RepositoryPatternDemoDoneDBContext _context;
+        private readonly INeighbourhoodsRepository _neighbourhoods;
 
-        public NeighbourhoodsController(RepositoryPatternDemoDoneDBContext context)
+        public NeighbourhoodsController(INeighbourhoodsRepository neighbourhoods)
         {
-            _context = context;
+            _neighbourhoods = neighbourhoods;
         }
 
-        // GET: Neighbourhoods
+        // GET: AllNeighbourhoods
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Neighbourhoods.ToListAsync());
+            return View(await _neighbourhoods.GetAllNeighbourhoodsAsync());
         }
 
         // GET: Neighbourhoods/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var neighbourhood = await _context.Neighbourhoods
-                .FirstOrDefaultAsync(m => m.Neighbourhood1 == id);
-            if (neighbourhood == null)
-            {
-                return NotFound();
-            }
-
-            return View(neighbourhood);
+            return View(await _neighbourhoods.GetNeighbourhoodByIdAsync(id));
         }
 
         // GET: Neighbourhoods/Create
@@ -46,54 +35,10 @@ namespace RepositoryPatternDemoDone.Controllers
         }
 
         // POST: Neighbourhoods/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("NeighbourhoodGroup,Neighbourhood1")] Neighbourhood neighbourhood)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(neighbourhood);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(neighbourhood);
-        }
-        
-
-        // GET: Neighbourhoods/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var neighbourhood = await _context.Neighbourhoods
-                .FirstOrDefaultAsync(m => m.Neighbourhood1 == id);
-            if (neighbourhood == null)
-            {
-                return NotFound();
-            }
-
-            return View(neighbourhood);
-        }
-
-        // POST: Neighbourhoods/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var neighbourhood = await _context.Neighbourhoods.FindAsync(id);
-            _context.Neighbourhoods.Remove(neighbourhood);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool NeighbourhoodExists(string id)
-        {
-            return _context.Neighbourhoods.Any(e => e.Neighbourhood1 == id);
+            return View(await _neighbourhoods.CreateNeighbourhoodAsync(neighbourhood));
         }
     }
 }

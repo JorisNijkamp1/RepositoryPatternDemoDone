@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using RepositoryPatternDemoDone.Interfaces;
 using RepositoryPatternDemoDone.Models;
+using RepositoryPatternDemoDone.Repositories;
 
 namespace RepositoryPatternDemoDone
 {
@@ -21,8 +23,11 @@ namespace RepositoryPatternDemoDone
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            
             services.AddDbContext<RepositoryPatternDemoDoneDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("RepositoryPatternDemoDB")));
+            
+            services.AddScoped<INeighbourhoodsRepository, NeighbourhoodRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
