@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/.idea.RepositoryPatternDemoDone.iml
+/projectSettingsUpdater.xml
+# Datasource local storage ignored files
+/../../../../../../:\visual-studio-projects\RepositoryPatternDemoDone\.idea\.idea.RepositoryPatternDemoDone\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
